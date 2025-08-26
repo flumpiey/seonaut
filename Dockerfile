@@ -25,3 +25,13 @@ ADD https://github.com/ufoscout/docker-compose-wait/releases/download/$WAIT_VERS
 RUN chmod +x /bin/wait
 
 WORKDIR /app
+EXPOSE 9000
+
+LABEL org.opencontainers.image.title="SEOnaut" \
+      org.opencontainers.image.description="Technical SEO crawler and analyzer" \
+      org.opencontainers.image.source="https://github.com/stjudewashere/seonaut" \
+      org.opencontainers.image.url="https://seonaut.org" \
+      org.opencontainers.image.vendor="SEOnaut" \
+      org.opencontainers.image.licenses="MIT"
+
+ENTRYPOINT ["sh","-c","/bin/wait && /app/seonaut"]

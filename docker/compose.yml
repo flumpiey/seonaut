@@ -1,0 +1,35 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: "SEOnaut-db"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=seonaut
+      - MYSQL_USER=seonaut
+      - MYSQL_PASSWORD=seonaut
+    volumes:
+      - seonaut_db:/var/lib/mysql
+    networks:
+      - seonaut_network
+
+  app:
+    image: malvadev/seonaut:latest
+    container_name: "SEOnaut-app"
+    ports:
+      - "${SEONAUT_PORT:-9000}:9000"
+    depends_on:
+      - db
+    environment:
+      - WAIT_HOSTS=db:3306
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+    networks:
+      - seonaut_network
+
+networks:
+  seonaut_network:
+    driver: bridge
+
+volumes:
+  seonaut_db:
