@@ -11,6 +11,13 @@ services:
       - seonaut_db:/var/lib/mysql
     networks:
       - seonaut_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 10s
 
   app:
     image: malvadev/seonaut:latest
@@ -18,7 +25,8 @@ services:
     ports:
       - "${SEONAUT_PORT:-9000}:9000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - WAIT_HOSTS=db:3306
       - WAIT_HOSTS_TIMEOUT=300
@@ -26,6 +34,7 @@ services:
       - WAIT_HOST_CONNECT_TIMEOUT=30
     networks:
       - seonaut_network
+    restart: unless-stopped
 
 networks:
   seonaut_network:

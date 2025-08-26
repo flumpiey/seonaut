@@ -24,6 +24,11 @@ ENV WAIT_VERSION 2.9.0
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/$WAIT_VERSION/wait /bin/wait
 RUN chmod +x /bin/wait
 
+ENV WAIT_HOSTS=db:3306 \
+    WAIT_HOSTS_TIMEOUT=300 \
+    WAIT_SLEEP_INTERVAL=30 \
+    WAIT_HOST_CONNECT_TIMEOUT=30
+
 WORKDIR /app
 EXPOSE 9000
 
